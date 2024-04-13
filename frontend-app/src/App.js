@@ -2,7 +2,7 @@ import React from 'react'
 
 const App = () => {
   return (
-    <div>
+    <div className='text-3xl text-center'>
       Welcome to The Trust Hire Website !! We will enhance the recuirtment process.
     </div>
   )
