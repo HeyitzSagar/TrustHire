@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-
 const connectDB = async () => {
   try {
     const connectionInstance = await mongoose.connect(
@@ -10,7 +9,7 @@ const connectDB = async () => {
       `\n Mongo DB connected  DB Host at : ${connectionInstance.connection.host}`
     );
   } catch (error) {
-    console.log("Error while connecting mongoDB", error);
+    console.log("Error while connecting mongoDB", error.message);
     process.exit(1);
   }
 };
