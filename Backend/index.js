@@ -8,6 +8,7 @@ import fileUpload from "express-fileupload";
 import { UserRouter } from "./routes/userRouter.js";
 import { ApplicationRouter } from "./routes/applicationRouter.js";
 import { JobRouter } from "./routes/jobRouter.js";   
+import { errorMiddleware } from "./middlewares/error.js";
 
 cloudinary.config({ 
   cloud_name: process.env.CLOUDINARY_CLIENT_NAME, 
@@ -40,3 +41,5 @@ const port = process.env.PORT || 4000;
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+
+app.use(errorMiddleware);
