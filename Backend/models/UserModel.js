@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -23,7 +23,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please provide your Password"],
     minLength: [3, "length should be greater than 3"],
-    maxLength: [8, "length should not be greater than 16"],
+    maxLength: [16, "length should not be greater than 16"],
   },
   role: {
     type: String,
@@ -51,9 +51,15 @@ UserSchema.pre("save", async function(next)
 // comparing password 
 UserSchema.methods.comparePassword = async function (enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
+};
+
+// jwt web token generations // generating a jwt token for authorizations
+UserSchema.methods.getJWTToken = function () {
+    return jwt.sign({id: this._id}, process.env.JWT_SECRET_KEY, {
+        expiresIn: process.env.JWT_EXPIRE,
+
+    })
 }
 
-// jwt web token generations
-UserSchema.methods.getJWTToken = function () {
-    return jwt.sign
-}
+const User = mongoose.model("User", UserSchema)
+export {User as UserModel};
