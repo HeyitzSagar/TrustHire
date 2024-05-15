@@ -31,15 +31,25 @@ export const login = catchAsyncError(async(req, res, next) => {
     const user = await UserModel.findOne({email}).select("+password");
     if(!user)
     {
-        new ErrorHandler("Invalid Email or Password", 400);
+       return next( new ErrorHandler("Invalid Email or Password", 400));
     }
     const isPasswordMatched = await user.comparePassword(password);
     if(!isPasswordMatched)
     {
-        new ErrorHandler("Invalid Email or Password", 400);
+        return next (new ErrorHandler("Invalid Email or Password", 400));
     }
     if (user.role !== role) {
-        new ErrorHandler("User with this role not found.", 400);
+        return next(new ErrorHandler("User with this role not found.", 400));
     }
     sendtoken(user, 200, res, "User logged in Successfully !")
-})
+});
+
+export const logout = catchAsyncError(async(req, res, next) => {
+    res.status(201).cookie("token", "", {
+        httpOnly: true, 
+        expires: new Date(Date.now()),
+    }).json({
+        json: true, 
+        message: "User logged out successfully !",
+    });
+});
